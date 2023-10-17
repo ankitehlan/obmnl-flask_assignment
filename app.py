@@ -62,30 +62,37 @@ def delete_transaction(transaction_id):
 
     return redirect(url_for("get_transactions"))
 
+
 # Search operation
-@app.route("/search", methods=['GET', 'POST'])
+@app.route("/search", methods=["GET", "POST"])
 def search_transactions():
-    if request.method == 'POST':
+    if request.method == "POST":
         print("Inside search post --------")
-        minAmount = float(request.form.get('min_amount'))
-        maxAmount = float(request.form.get('max_amount'))
-        print(f'min amount: {minAmount}, max_amount: {maxAmount}')
-        
+        minAmount = float(request.form.get("min_amount"))
+        maxAmount = float(request.form.get("max_amount"))
+        print(f"min amount: {minAmount}, max_amount: {maxAmount}")
+
         if minAmount and maxAmount is not None:
-            filtered_transactions = filter(lambda t: t['amount'] >= minAmount and t['amount'] <= maxAmount, transactions)
-            return render_template("transactions.html", transactions=filtered_transactions)
-        return {"Error message":"input is wrong"}, 404
+            filtered_transactions = filter(
+                lambda t: t["amount"] >= minAmount and t["amount"] <= maxAmount,
+                transactions,
+            )
+            return render_template(
+                "transactions.html", transactions=filtered_transactions
+            )
+        return {"Error message": "input is wrong"}, 404
     else:
-        return render_template('search.html')
-    
+        return render_template("search.html")
+
+
 # Total balance
-@app.route('/balance')
+@app.route("/balance")
 def total_balance():
     balance = 0
     for transaction in transactions:
-        balance += transaction['amount']
-        
-    return {"Total balance":f'{balance}'}
+        balance += transaction["amount"]
+
+    return {"Total balance": f"{balance}"}
 
 
 # Run the Flask app
